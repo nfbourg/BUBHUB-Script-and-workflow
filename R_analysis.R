@@ -16,9 +16,6 @@ readNfilt <- function(path, sffx, level){
   return(filt)
 }
 setwd("/projectnb/bubhub/users/nfbourg/cte_risk_variants_mrnaseq/samples/R_stats")
-#setwd("/mnt/bubhub/cte/samples/R_stats/")
-#setwd("/mnt/bubhub/samples/R_stats")
-
 
 ipak(required_packages)
 
@@ -40,20 +37,9 @@ rd_cts <- (read_delim('./../norm_counts.csv',',',col_names = TRUE) %>% rename('G
 
 trim_rd_cts <- as.data.frame(left_join(gene_list,rd_cts,by = 'Gene_id') %>% filter_all(all_vars(. !=0)) %>% column_to_rownames('Gene_id')) %>% log10() 
 
-#trim_rd_cts_2 <- as.data.frame(left_join(gene_list,rd_cts,by = 'Gene_id') %>% filter(!grepl("210082.2",Gene_id))%>% 
-#                                 filter(!grepl("131095",Gene_id))%>% filter(!grepl("251562",Gene_id))%>% 
-#                                 filter(!grepl("211459",Gene_id))%>% filter(!grepl("197971",Gene_id))%>% 
-#                                 filter(!grepl("198727",Gene_id))%>% filter(!grepl("198763",Gene_id))%>% 
-#                                 filter(!grepl("198695",Gene_id))%>% filter(!grepl("198840",Gene_id))%>% 
-#                                 filter(!grepl("198804",Gene_id)) %>%filter(!grepl("19888",Gene_id)) %>% 
-#                                 column_to_rownames('Gene_id')) %>% log10()
 trim_rd_cts <- as.matrix(transform(trim_rd_cts, as.numeric()))
-#trim_rd_cts_2 <- as.matrix(transform(trim_rd_cts_2, as.numeric()))
 coldata <- read_delim('./../CTE_sample_info.csv',',') %>% select('ID','Status') %>% as.data.frame() %>% column_to_rownames('ID')
 
 
 pheatmap(trim_rd_cts, cluster_rows= , show_rownames=TRUE,
          cluster_cols=TRUE, annotation_col= coldata,cellheight = 20, cellwidth= 30, filename = 'heatmap_full.pdf')
-#pheatmap(trim_rd_cts_2, cluster_rows= , show_rownames=TRUE,
-#         cluster_cols=TRUE, annotation_col= coldata,cellheight = 20, cellwidth= 30, filename = '~/Documents/heatmap_trimmed.pdf')
-
