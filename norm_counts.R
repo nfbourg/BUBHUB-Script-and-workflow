@@ -40,13 +40,9 @@ DESeqtest <- function(rd_cts_t, coldata_t, expVar){
 	dds <- DESeq(dds)
 	res <- results(dds,cooksCutoff=FALSE)
 	cf <- resultsNames(dds)[2]
-	#res_LFC <- lfcShrink(dds, coef=cf, type="apeglm")
-	#write tsv files
 	nm = paste('',expVar,collapse='_')
 	name <- paste('R_res_counts_vs_',expVar, '.tsv', sep='')
 	writeSeq(res, name)
-	#nameLFC <-  paste('R_res_LFC_counts_vs_',expVar, '.tsv', sep='')
-	#writeSeq(res_LFC,nameLFC)
 	return()
 }
 
@@ -138,13 +134,9 @@ writeTxt <- function(txt, expVar, fname,APPND){
 
 
 setwd("/projectnb/bubhub/users/nfbourg/cte_risk_variants_mrnaseq/samples/R_stats")
-#setwd("/mnt/bubhub/cte/samples/R_stats")
 args = commandArgs(trailingOnly=TRUE)
-#counts = args[1]
 ipak(required_packages)
-#rd_cts_t = read_delim('counts.tsv','\t',col_names = TRUE)
 rd_cts_t = read_delim('./../counts.tsv','\t',col_names = TRUE)
-#coldata_t = read_delim('CTE_sample_info.csv',',')
 coldata_t = read_delim('./../CTE_sample_info.csv',',')
 for (form in formulas){
 	expVar = unlist(form)
@@ -158,17 +150,11 @@ for (form in formulas){
 	txt = 'The number of genes with p value below .05 are:'
 	pt05 <<- tibble(Pair = '--',Num_genes = '--')
 	capture.output(cat(txt,'\n',sep=''), file='pt05-pvals.txt')
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'RHI', 'CNT', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CNT', 'RHI', expVar)
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_12', 'CNT', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CNT', 'CTE_12', expVar)
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_34', 'CNT', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CNT', 'CTE_34', expVar)
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_12', 'RHI', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'RHI', 'CTE_12', expVar)
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_34', 'RHI', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'RHI', 'CTE_34', expVar)
-#	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_34', 'CTE_12', expVar)
 	DnF_Analysis(rd_cts_t, coldata_t, 0, 'CTE_12', 'CTE_34', expVar)
   pt05 %>% write_tsv('pt05_cts.txt')
 }
